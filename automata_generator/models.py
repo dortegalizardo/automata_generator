@@ -148,13 +148,14 @@ class AutomataTest(models.Model):
         help_text='Seleccione la automata asociada a este estado.',
         on_delete=models.CASCADE,
         )
-    file = models.FileField(
-        _('Archivo de prueba'),
-        upload_to='documents/',
-        help_text="Cargue el archivo json de prueba para la automata.")
+    test = models.TextField(
+        _('Cadenas de Prueba'),
+        blank=True,
+        help_text='Ingrese cadenas de prueba separadas por una "," '
+    )
 
     def __str__(self):
-        return '%s / %s' %(self.automata, self.file)
+        return '%s / %s' %(self.automata, self.test)
     
     class Meta:
         verbose_name = 'Prueba de Automata'
