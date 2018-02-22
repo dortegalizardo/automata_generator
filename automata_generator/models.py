@@ -45,7 +45,23 @@ class AutomataState(models.Model):
         max_length=2,
         help_text='Ingrese la etiqueta del estado. Ej: q0'
         )
+    start_state = models.BooleanField(
+         _('Es estado inicio?'),
+        blank=False,
+        default=True
+        )
+    final_state = models.BooleanField(
+        _('Es estado final?'),
+        blank=False,
+        default=False
+        )
     
+    def clean(self):
+        states = AutomataState.objects.filter(automata=self.automata)
+        for item in states:
+            if item.start_state == True and self.start_state == True:
+                raise ValidationError('Ya hay un estado incial.')
+
     def __str__(self):
         return str(self.label)
     
@@ -143,4 +159,3 @@ class AutomataTest(models.Model):
     class Meta:
         verbose_name = 'Prueba de Automata'
         verbose_name_plural = 'Pruebas de Automata'
-
