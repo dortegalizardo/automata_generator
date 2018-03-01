@@ -60,10 +60,11 @@ def ajax_test_automata(request, pk):
     transitions = AutomataTransition.objects.filter(automata=automata)
     results = []
     for string in strings:
-        for char in string:
-            for item in transitions:
-                if char == item.value.symbol and current_state.id == item.transition_from.id:
-                    current_state = item.transition_to
+        current_state = initial_state
+        for char in string.strip():
+            inner_transitions = AutomataTransition.objects.filter(automata=automata, transitionfrom = current_state, value__symbol=char)
+            if inner_transitions:
+                current_state = inner_transitions[0].transitionto
         if current_state in final_states:
             results.append({
                 'string': str(string),

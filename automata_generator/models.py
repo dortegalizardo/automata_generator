@@ -104,7 +104,7 @@ class AutomataTransition(models.Model):
         help_text='Seleccione la automata asociada a este estado.',
         on_delete=models.CASCADE,
         )
-    transition_from = models.ForeignKey(
+    transitionfrom = models.ForeignKey(
         AutomataState,
         blank=False,
         null=False,
@@ -119,7 +119,7 @@ class AutomataTransition(models.Model):
         help_text='Seleccion el valor de la transición',
         on_delete=models.CASCADE,
         )
-    transition_to = models.ForeignKey(
+    transitionto = models.ForeignKey(
         AutomataState,
         blank=False,
         null=False,
@@ -131,8 +131,8 @@ class AutomataTransition(models.Model):
     def __str__(self):
         return '%s| desde: %s , hasta: %s , con:%s'  %(
             self.automata,
-            self.transition_from,
-            self.transition_to,
+            self.transitionfrom,
+            self.transitionto,
             self.value)
     
     class Meta:
