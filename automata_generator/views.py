@@ -37,8 +37,8 @@ def ajax_get_transitions(request, pk):
     for item in transitions:
         data_list.append({
             'id': str(item.id),
-            'from': str(item.transition_from.id),
-            'to': str(item.transition_to.id),
+            'from': str(item.transitionfrom.id),
+            'to': str(item.transitionto.id),
             'value': str(item.value.symbol)
         })
     contex_dict = {
