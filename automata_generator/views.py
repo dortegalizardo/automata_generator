@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
-from automata_generator.models import Automata, AutomataState, AutomataTransition, AutomataTest
+from automata_generator.models import Automata, AutomataState, AutomataTransition, AutomataTest, AutomataLanguage
 from django.forms.models import model_to_dict
 from django.core import serializers
 
@@ -48,11 +48,36 @@ def ajax_get_transitions(request, pk):
     return HttpResponse(json.dumps(contex_dict), content_type='application/json')
 
 
+def check_automata(automata):
+    transitions = AutomataTransition.objects.filter(automata=automata)
+    symbols = AutomataLanguage.objects.filter(automata=automata)
+    states = AutomataState.objects.filter(automata=automata)
+    is_nfa = False
+    for state in states:
+        for symbol in symbols:
+            transitions = AutomataTransition.objects.filter(automata=automata, transitionfrom=state, value=symbol)
+            print(transitions)
+            if transitions.count() > 1:
+                is_nfa = True
+    return is_nfa
+
+def create_nfa(autoamta):
+    transitions = AutomataTransition.objects.filter(automata=automata)
+    symbols = AutomataLanguage.objects.filter(automata=automata)
+    states = AutomataState.objects.filter(automata=automata)
+    initial_state = states.filter(start_state=True)[0]
+
+    return 0
+
 def ajax_test_automata(request, pk):
     contex_dict = {}
     test = get_object_or_404(AutomataTest, pk=pk)
     strings = test.test.split(',')
     automata = test.automata
+    nfa = check_automata(test.automata)
+    if nfa:
+        print('Create NFA')
+    """
     states = AutomataState.objects.filter(automata=automata)
     initial_state = states.filter(start_state=True)[0]
     final_states = states.filter(final_state=True)
@@ -75,9 +100,10 @@ def ajax_test_automata(request, pk):
                 'string': str(string),
                 'result': 'Error'
             })
+    """
     contex_dict = {
         'status': 'OK',
-        'tests': results
+        'tests': ''
     }       
         
     return HttpResponse(json.dumps(contex_dict), content_type='application/json')

@@ -129,7 +129,7 @@ class AutomataTransition(models.Model):
         )
     
     def __str__(self):
-        return '%s| desde: %s , hasta: %s , con:%s'  %(
+        return '%s | desde: %s , hasta: %s , con: %s'  %(
             self.automata,
             self.transitionfrom,
             self.transitionto,
