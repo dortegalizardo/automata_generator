@@ -20,6 +20,23 @@ class Automata(models.Model):
         null=False,
         help_text='Brinde una breve explicación acerca de la automata'
         )
+    is_nfa_eps = models.BooleanField(
+        _('Es NFA EPS?'),
+        default=False,
+        help_text='Seleccione si el automata es NFA'
+    )
+    is_nfa = models.BooleanField(
+        _('Es NFA?'),
+        default=False,
+        help_text='Seleccione si el automata es NFA'
+    )
+    dfa_associated = models.ForeignKey(
+        'self',
+        blank=True,
+        null=True,
+        help_text='Seleccione si tiene una sección padre, sino por favor deje el campo en blanco',
+        on_delete = models.CASCADE,
+        related_name='DFA')
     
     def __str__(self):
         return str(self.name)
@@ -42,13 +59,13 @@ class AutomataState(models.Model):
         _('Etiqueta'),
         blank=False,
         null=False,
-        max_length=2,
+        max_length=10,
         help_text='Ingrese la etiqueta del estado. Ej: q0'
         )
     start_state = models.BooleanField(
          _('Es estado inicio?'),
         blank=False,
-        default=True
+        default=False
         )
     final_state = models.BooleanField(
         _('Es estado final?'),

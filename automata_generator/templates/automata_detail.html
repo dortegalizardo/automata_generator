@@ -86,7 +86,11 @@
             <tr id='test_{{item.pk}}'>
                     <td>{{item.test}}</td>
                     <td><button type="button" class="btn btn-default" onclick="testAutomata({{item.id}})">Probar</button></td>
-                    <td></td>
+                    <td>
+                        {% if item.automata.is_nfa %}
+                            <a href="/automata/{{automata.dfa_associated.id}}">Probar con DFA Equivalente</a>
+                        {% endif %}
+                    </td>
                   </tr>
             {% endfor %}
       
@@ -159,13 +163,19 @@
           url: endpoint,
           success: function(data){
               console.log(data);
-              $.each(data['tests'],function(){
-                  var current = this
-                  console.log(current);
+              if(data['status'] == 'DFA'){
+                $('#test_'+id+' td:nth-child(3)').append(
+                      '<a href="/automata/'+data['id']+'/"> Probar con DFA Equivalente </a>'
+                  )
+              }else{
+                $.each(data['tests'],function(){
+                  var current = this;
                   $('#test_'+id+' td:nth-child(3)').append(
                       '<p>'+ current['string'] + ' - Resultado: ' + current['result'] + '</p>'
                   )
               });
+              }
+              
           }
       });
   }
