@@ -172,7 +172,7 @@ def create_nfa(automata):
 def ajax_test_automata(request, pk):
     contex_dict = {}
     test = get_object_or_404(AutomataTest, pk=pk)
-    strings = test.test.split(',')
+    strings = test.test.split('/')
     automata = test.automata
     nfa = check_automata(test.automata)
     if nfa:
@@ -192,23 +192,34 @@ def ajax_test_automata(request, pk):
         current_state = initial_state
         transitions = AutomataTransition.objects.filter(automata=automata)
         results = []
+        problem_char = ''
         for string in strings:
             current_state = initial_state
-            for char in string.strip():
+            for char in string:
+                test_char = AutomataLanguage.objects.filter(symbol=char)
+                if test_char.count() == 0 and problem_char == '':
+                    problem_char = char
                 inner_transitions = AutomataTransition.objects.filter(automata=automata, transitionfrom = current_state, value__symbol=char)
                 if inner_transitions:
                     current_state = inner_transitions[0].transitionto
                 else:
                     current_state = None
+    
+                    
             if current_state in final_states:
                 results.append({
                     'string': str(string),
                     'result': 'OK'
                 })
+            elif current_state == None:
+                results.append({
+                    'string': str(string),
+                    'result': 'Error - Cadena no reconocida -> ' +str(problem_char)
+                })
             else:
                 results.append({
                     'string': str(string),
-                    'result': 'Error'
+                    'result': 'Error - No cumple '
                 })
         contex_dict = {
             'status': 'OK',

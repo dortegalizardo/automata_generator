@@ -76,7 +76,7 @@
             <table class="table table-striped">
     <thead>
       <tr>
-        <th>Prueba</th>
+        <th style="width: 50%">Prueba</th>
         <th>Acción</th>
         <th>Resultado</th>
       </tr>
@@ -85,7 +85,11 @@
             {%for item in automata.automatatest_set.all%}
             <tr id='test_{{item.pk}}'>
                     <td>{{item.test}}</td>
-                    <td><button type="button" class="btn btn-default" onclick="testAutomata({{item.id}})">Probar</button></td>
+                    <td>
+                        {% if not item.automata.is_nfa %}
+                            <button type="button" class="btn btn-default" onclick="testAutomata({{item.id}})">Probar</button></td>
+                        {% endif %}
+                        
                     <td>
                         {% if item.automata.is_nfa %}
                             <a href="/automata/{{automata.dfa_associated.id}}">Probar con DFA Equivalente</a>
@@ -171,7 +175,7 @@
                 $.each(data['tests'],function(){
                   var current = this;
                   $('#test_'+id+' td:nth-child(3)').append(
-                      '<p>'+ current['string'] + ' - Resultado: ' + current['result'] + '</p>'
+                      '<p>'+ current['string'] + ' - <b>Resultado</b>: ' + current['result'] + '</p>'
                   )
               });
               }
