@@ -58,6 +58,27 @@
                 <hr/>
             </div>
         </div>
+        <div class="row">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-default" id='create_pda' onclick="createAutomata()">Crear PDA</button>
+                </div>
+            </div>
         
     </div>
 {% endblock %}
+
+{% block extrajs %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script>
+        function createAutomata(){
+            var endpoint = 'create_pda/';
+            $.ajax({
+                type: 'GET',
+                url: endpoint,
+                success: function(data){
+                    console.log(data);
+                }
+            });
+        }
+        </script>
+{% endblock%}

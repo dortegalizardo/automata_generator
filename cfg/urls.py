@@ -11,9 +11,14 @@ urlpatterns = [
         name='home'
     ),
     url(
-        r'^cfg/(?P<pk>\d+)/$',
+        r'^(?P<pk>\d+)/$',
         cfg_views.CFGDetail.as_view(),
         name='detail'
+    ),
+    url(
+        r'^(?P<pk>\d+)/create_pda/$',
+        cfg_views.ajax_create_pda,
+        name='create_pda'
     ),
 
 ]

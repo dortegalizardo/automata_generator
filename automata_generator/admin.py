@@ -12,5 +12,9 @@ admin.site.register(PDA)
 admin.site.register(PDAState)
 admin.site.register(PDASymbolInput)
 admin.site.register(PDASymbolStack)
-admin.site.register(PDATransition)
+@admin.register(PDATransition)
+class PDATransitionAdmin(admin.ModelAdmin):
+    list_display = ('pda', 'state', 'pda_input', 'pda_stack', 'move')
+    list_display_links = ['pda']
+
 admin.site.register(TransitionMove)

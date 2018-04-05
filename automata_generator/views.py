@@ -179,7 +179,7 @@ def ajax_test_automata(request, pk):
         # Revisa si ya se creó un DFA equivalente
         if automata.is_nfa == False:
             # Crea DFA
-            new_automata = create_nfa(automata)
+            new_automata = create_dfa(automata)
             contex_dict = {
                 'status': 'DFA',
                 'id': str(new_automata)

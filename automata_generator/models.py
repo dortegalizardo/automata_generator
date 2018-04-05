@@ -219,7 +219,7 @@ class PDAState(models.Model):
 
 class PDASymbolStack(models.Model):
     pda = models.ForeignKey(PDA, verbose_name='PDA', on_delete=models.CASCADE, help_text='Seleccione el PDA.')
-    value = models.CharField(_('Valor'), max_length=2, help_text='Ingrese la etiqueta')
+    value = models.CharField(_('Valor'), max_length=255, help_text='Ingrese la etiqueta')
     start_symbol = models.BooleanField(
         _('Es símbolo incial?'),
         blank=False,
@@ -232,7 +232,7 @@ class PDASymbolStack(models.Model):
 
 class PDASymbolInput(models.Model):
     pda = models.ForeignKey(PDA, verbose_name='PDA', on_delete=models.CASCADE, help_text='Seleccione el PDA.')
-    value = models.CharField(_('Valor'), max_length=2, help_text='Ingrese la etiqueta')
+    value = models.CharField(_('Valor'), max_length=255, help_text='Ingrese la etiqueta')
     
     def __str__(self):
          return '%s - %s' % (self.pda, self.value)
@@ -253,10 +253,4 @@ class PDATransition(models.Model):
     move = models.ForeignKey(TransitionMove, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '%s - Estado: %s | Input: %s | Stack: %s | Move: %s' % (
-            self.pda,
-            self.state,
-            self.pda_input,
-            self.pda_stack,
-            self.move
-        )
+        return str(self.id)
