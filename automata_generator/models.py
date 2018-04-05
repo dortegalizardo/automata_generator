@@ -177,3 +177,86 @@ class AutomataTest(models.Model):
     class Meta:
         verbose_name = 'Prueba de Automata'
         verbose_name_plural = 'Pruebas de Automata'
+
+
+class PDA(models.Model):
+    name = models.CharField(
+        _('Nombre'),
+        max_length=50,
+        help_text='Nombre del PDA')
+    description = models.TextField(
+        _('Descripción'),
+        help_text='Descripción del PDA')
+
+    def __str__(self):
+        return str(self.name)
+
+
+class PDAState(models.Model):
+    pda = models.ForeignKey(
+        PDA,
+        verbose_name='PDA',
+        on_delete=models.CASCADE,
+        help_text='Seleccione el PDA.')
+    label = models.CharField(
+        _('Etiqueta'),
+        max_length=2,
+        help_text='Ingrese la etiqueta')
+    start_state = models.BooleanField(
+         _('Es estado inicio?'),
+        blank=False,
+        default=False
+        )
+    final_state = models.BooleanField(
+        _('Es estado final?'),
+        blank=False,
+        default=False
+        )
+
+    def __str__(self):
+        return '%s - %s' % (self.pda, self.label)
+
+
+class PDASymbolStack(models.Model):
+    pda = models.ForeignKey(PDA, verbose_name='PDA', on_delete=models.CASCADE, help_text='Seleccione el PDA.')
+    value = models.CharField(_('Valor'), max_length=2, help_text='Ingrese la etiqueta')
+    start_symbol = models.BooleanField(
+        _('Es símbolo incial?'),
+        blank=False,
+        default=False
+        )
+
+    def __str__(self):
+         return '%s - %s' % (self.pda, self.value)
+
+
+class PDASymbolInput(models.Model):
+    pda = models.ForeignKey(PDA, verbose_name='PDA', on_delete=models.CASCADE, help_text='Seleccione el PDA.')
+    value = models.CharField(_('Valor'), max_length=2, help_text='Ingrese la etiqueta')
+    
+    def __str__(self):
+         return '%s - %s' % (self.pda, self.value)
+
+
+class TransitionMove(models.Model):
+    state = models.ForeignKey(PDAState, on_delete=models.CASCADE, verbose_name='Estado')
+    production = models.TextField(_('Producción'))
+
+    def __str__(self):
+        return '(%s , %s)' % (self.state, self.production)
+
+class PDATransition(models.Model):
+    pda = models.ForeignKey(PDA, verbose_name='PDA', on_delete=models.CASCADE, help_text='Seleccione el PDA.')
+    state = models.ForeignKey(PDAState, on_delete=models.CASCADE, verbose_name='Estado')
+    pda_input = models.ForeignKey(PDASymbolInput, on_delete=models.CASCADE)
+    pda_stack = models.ForeignKey(PDASymbolStack, on_delete=models.CASCADE)
+    move = models.ForeignKey(TransitionMove, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s - Estado: %s | Input: %s | Stack: %s | Move: %s' % (
+            self.pda,
+            self.state,
+            self.pda_input,
+            self.pda_stack,
+            self.move
+        )
