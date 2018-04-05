@@ -129,7 +129,7 @@ def assign_tests(new_automata, automata):
     
     
 
-def create_nfa(automata):
+def create_dfa(automata):
     transitions = AutomataTransition.objects.filter(automata=automata).order_by('-transitionfrom__start_state')
     symbols = AutomataLanguage.objects.filter(automata=automata)
     states = AutomataState.objects.filter(automata=automata).order_by('-start_state')
