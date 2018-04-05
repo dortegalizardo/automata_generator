@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="margin-top:20px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{cfg.name}}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row" style="margin-top:40px; margin-bottom:40px ">
+            <div class="col-md-12">
+                <h4>Descripción: {{cfg.description}}</h4>
+            </div>
+        </div>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-md-4">
+                <h3>No Terminales</h3>                
+            </div>
+            <div class="col-md-4">
+                    <h3>Terminales</h3>                
+                </div>
+            <div class="col-md-4">
+                    <h3>Producciones</h3>                
+                </div>
+        </div>
+        <div class="row">
+                <div class="col-md-4">
+                        <ul>
+                    {%for item in cfg.nonterminal_set.all%}
+                <li>{{item}}</li>
+                {%endfor%}
+                    </ul>
+                    </div>
+            <div class="col-md-4">
+                <ul>
+            {%for item in cfg.terminal_set.all%}
+            <li>{{item}}</li>
+            {%endfor%}
+            </ul>
+            </div>
+            <div class="col-md-4">
+                <ul>
+                {%for item in cfg.production_set.all%}
+                <li>{{item}}</li>
+                {%endfor%}
+                </ul>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr/>
+            </div>
+        </div>
+        
+    </div>
+{% endblock %}
